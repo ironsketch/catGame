@@ -5,6 +5,7 @@ This is a shitty game made in pygame. It's actually pretty fun to play, mostly c
 
 Goals:
 
+* SEPERATE CLASSES
 * ~~Fix collisions~~
 * Have the kitty eat things (catnip and food etc.)
 * ~~Smooth jumping~~
