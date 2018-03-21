@@ -12,3 +12,12 @@ class Window:
 
     def getWin(self):
         return self.surf
+
+    def getHeight(self):
+        return self.WINH
+
+    def getWidth(self):
+        return self.WINW
+
+    def update(self):
+        self.surf.blit(self.bck, (0, 0))
