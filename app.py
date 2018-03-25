@@ -24,10 +24,7 @@ while True:
     if(key[K_ESCAPE]):
         pygame.quit()
         sys.exit()
-    if(key[K_d] and player.getRX() >= surf.getWidth() * .6):
-        ground.move(surf.getWidth())
-        trees.move(surf.getWidth())
-    player.move(key, surf.getWidth(), colItems, surf.getHeight())
+    player.move(key, surf.getWidth(), colItems, surf.getHeight(), ground, trees)
 
     # Update #
     surf.update()

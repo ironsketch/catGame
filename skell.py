@@ -24,20 +24,20 @@ class Skeleton:
     def changeVelocity(newSpeed):
         self.velocity = newSpeed
     
-    def collided(self, letter, colItems, rec, WINW, WINH):
+    def collided(self, letter, colItems, rec):
         for item in colItems:
             for i in item.rect:
-                if(i.collidepoint(rec.midleft) and letter == 'a'):
-                    return True
+
                 if(i.collidepoint(rec.midright) and letter == 'd'):
                     return True
-                if(i.collidepoint(rec.midbottom) and letter == 's'):
+                elif(i.collidepoint(rec.midleft) and letter == 'a'):
                     return True
-                if(i.collidepoint(rec.midtop) and letter == 'w'):
+                # Up
+                elif(i.collidepoint(rec.midtop) and letter == 'w'):
                     return True
-        if(rec.x <= 0 or rec.x + rec.width >= WINW or rec.y <= 0 or rec.y + rec.height >= WINH):
-            return True
-        
+                # Down
+                elif(i.collidepoint(rec.midbottom) and letter == 's'):
+                    return True
         return False
 
     def move(self, DIR):

@@ -11,20 +11,26 @@ class Player(Skeleton):
         Skeleton.__init__(self, image, x, y)
         self.flipped = False
     
-    def move(self, key, WINW, colItems, WINH):
-        if(key[K_d] and not self.collided('d', colItems, self.rect[0], WINW, WINH)):
+    def move(self, key, WINW, colItems, WINH, ground, trees):
+        # Forward
+        if(key[K_d] and not self.collided('d', colItems, self.rect[0]) and not self.rect[0].x + self.rect[0].width >= WINW):
+            print("meow")
             if self.flipped:
                 self.img[0][0] = pygame.transform.flip(self.img[0][0], True, False)
                 self.flipped = False
             if(self.img[0][1] <= WINW * .6):
                 super(Player, self).move('d')
-        if(key[K_a] and not self.collided('a', colItems, self.rect[0], WINW, WINH)):
+            else:
+                ground.move(WINH)
+                trees.move(WINH)
+        # Backward
+        if(key[K_a] and not self.collided('a', colItems, self.rect[0]) and not self.rect[0].x <= 0):
             if not self.flipped:
                 self.img[0][0] = pygame.transform.flip(self.img[0][0], True, False)
                 self.flipped = True
             super(Player, self).move('a')
-        if(not self.collided('s', colItems, self.rect[0], WINW, WINH)):
-            super(Player, self).gravity()
+        if(not self.collided('s', colItems, self.rect[0]) or self.rect[0].y + self.rect[0].height >= WINH):
+            super(Player, self).gravity(0)
 
     def getRX(self):
         return self.img[0][1] + self.img[0][0].get_width()
