@@ -7,15 +7,16 @@ class Skeleton:
         self.img = []
         self.rect = []
         self.speed = 5
+        self.jumpSpeed = 5
         self.img.append(list((image, x, y)))
-        rectangle = pygame.Rect(x, y, image.get_width(), image.get_height())
+        rectangle = pygame.Rect(x, y, image.get_width(), image.get_height() * .8)
         self.rect.append(rectangle)
-        self.gravity = 5
-        self.velocity = 7
+        self.gravity = 7
+        self.velocity = 0
 
     def add(self, image, x, y):
         self.img.append(list((image, x, y)))
-        rectangle = pygame.Rect(x, y, image.get_width(), image.get_height())
+        rectangle = pygame.Rect(x, y, image.get_width(), image.get_height() * .8)
         self.rect.append(rectangle)
 
     def changeSpeed(newSpeed):
@@ -27,7 +28,6 @@ class Skeleton:
     def collided(self, letter, colItems, rec):
         for item in colItems:
             for i in item.rect:
-
                 if(i.collidepoint(rec.midright) and letter == 'd'):
                     return True
                 elif(i.collidepoint(rec.midleft) and letter == 'a'):
@@ -53,9 +53,9 @@ class Skeleton:
                 i[0] -= self.speed
         if(DIR == 'w'):
             for i in self.img:
-                i[2] -= self.speed
+                i[2] -= self.jumpSpeed
             for i in self.rect:
-                i[1] -= self.speed
+                i[1] -= self.jumpSpeed
         if(DIR == 's'):
             for i in self.img:
                 i[2] += self.speed
@@ -71,14 +71,17 @@ class Skeleton:
                 c -= 1
             c += 1
 
-    def gravity(self, vel):
+    def gravity(self):
+        if(self.velocity > 0):
+            self.velocity = 0
+        
         for i in self.img:
-            i[1] += self.velocity
+            i[2] += self.velocity
             i[2] += self.gravity
         for r in self.rect:
-            r[0] += self.velocity
+            r[1] += self.velocity
             r[1] += self.gravity
-        self.velocity += vel
+        self.velocity += 2
 
     def update(self, surf):
         for i in self.img:
