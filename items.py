@@ -11,7 +11,7 @@ class Player(Skeleton):
         Skeleton.__init__(self, image, x, y)
         self.flipped = False
     
-    def move(self, key, WINW, colItems, WINH, ground, trees):
+    def move(self, key, WINW, colItems, WINH, ground, trees, poops):
         # Forward
         if(key[K_d] and not self.collided('d', colItems, self.rect[0]) and not self.rect[0].x + self.rect[0].width >= WINW):
             if self.flipped:
@@ -22,14 +22,14 @@ class Player(Skeleton):
             else:
                 ground.move(WINW)
                 trees.move(WINW)
+                poops.move(WINW, colItems)
         # Backward
-        if(key[K_a] and not self.collided('a', colItems, self.rect[0]) and not self.rect[0].x <= 0):
+        elif(key[K_a] and not self.collided('a', colItems, self.rect[0]) and not self.rect[0].x <= 0):
             if not self.flipped:
                 self.img[0][0] = pygame.transform.flip(self.img[0][0], True, False)
-                self.flipped = True
-            super(Player, self).move('a')
+
         # JUMP Yo'
-        if(key[K_w] and self.collided('s', colItems, self.rect[0]) and not self.collided('w', colItems, self.rect[0]) and not self.rect[0].y >= WINH):
+        elif(key[K_w] and self.collided('s', colItems, self.rect[0]) and not self.collided('w', colItems, self.rect[0]) and not self.rect[0].y >= WINH):
             self.velocity = -22
             super(Player, self).move('w')
         # Gravity
@@ -95,6 +95,19 @@ class Clouds(Skeleton):
             if(add == 0):
                 self.add(self.cloudLarge, self.x, self.y * heightOfCloud)
         super(Clouds, self).move('a')
+
+#####################
+#       POOPS       #
+#####################
+class Poops(Skeleton):
+    
+    def __init__(self, image, x, y):
+        Skeleton.__init__(self, image, x, y)
+
+    def move(self, WINH, colItems):
+        super(Poops, self).move('a')
+        #if(not self.collided('s', colItems, self.rect[0]) or self.rect[0].y + self.rect[0].height >= WINH):
+        super(Poops, self).gravity()
 
 #class hurtItems:
 

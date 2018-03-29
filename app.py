@@ -10,6 +10,7 @@ player = items.Player(pygame.image.load("src/gifcat_small.png"), 50, 100)
 ground = items.Ground(pygame.image.load("src/grass.jpg"), 0, surf.getHeight())
 trees = items.Trees(pygame.image.load("src/Tree_Tall.png"), pygame.image.load("src/Tree_Short.png"), surf.getWidth(), surf.getHeight() - ground.img[0][0].get_height())
 clouds = items.Clouds(pygame.image.load("src/small_cloud.png"), pygame.image.load("src/large_cloud.png"), surf.getWidth(), pygame.image.load("src/small_cloud.png").get_height())
+poops = items.Poops(pygame.image.load("src/poo.png"), -30, -30)
 colItems = []
 colItems.append(ground)
 
@@ -24,7 +25,12 @@ while True:
     if(key[K_ESCAPE]):
         pygame.quit()
         sys.exit()
-    player.move(key, surf.getWidth(), colItems, surf.getHeight(), ground, trees)
+    player.move(key, surf.getWidth(), colItems, surf.getHeight(), ground, trees, poops)
+    if(key[K_e]):
+        if(not player.flipped):
+            poops.add(pygame.image.load("src/poo.png"), player.rect[0].midright[0], player.rect[0].midright[1])
+        else:
+            poops.add(pygame.image.load("src/poo.png"), player.rect[0].midleft[0], player.rect[0].midleft[1])
     clouds.move(surf.getWidth())
 
     # Update #
@@ -32,6 +38,7 @@ while True:
     clouds.update(surf.getWin())
     ground.update(surf.getWin())
     trees.update(surf.getWin())
+    poops.update(surf.getWin())
     player.update(surf.getWin())
 
     # Quit Option #
