@@ -26,12 +26,18 @@ while True:
         pygame.quit()
         sys.exit()
     player.move(key, surf.getWidth(), colItems, surf.getHeight(), ground, trees, poops)
-    if(key[K_e]):
-        if(not player.flipped):
-            poops.add(pygame.image.load("src/poo.png"), player.rect[0].midright[0], player.rect[0].midright[1])
-        else:
-            poops.add(pygame.image.load("src/poo.png"), player.rect[0].midleft[0], player.rect[0].midleft[1])
+    timeNow = pygame.time.get_ticks()
+    if(key[K_e] or key[K_o]):
+        if(timeNow - player.poopTimer >= poops.poopWait):
+            if player.flipped:
+                poops.add(pygame.image.load("src/poo.png"), player.rect[0].midright[0], player.rect[0].y - 20)
+            else:
+                poops.add(pygame.image.load("src/poo.png"), player.rect[0].midleft[0] - 10, player.rect[0].y - 20)
+            player.poopTimer = pygame.time.get_ticks()
     clouds.move(surf.getWidth())
+
+    # gravity #
+    poops.gravity2(colItems)
 
     # Update #
     surf.update()

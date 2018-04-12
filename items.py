@@ -10,7 +10,8 @@ class Player(Skeleton):
     def __init__(self, image, x, y):
         Skeleton.__init__(self, image, x, y)
         self.flipped = False
-    
+        self.poopTimer = pygame.time.get_ticks()
+
     def move(self, key, WINW, colItems, WINH, ground, trees, poops):
         # Forward
         if(key[K_d] and not self.collided('d', colItems, self.rect[0]) and not self.rect[0].x + self.rect[0].width >= WINW):
@@ -22,16 +23,19 @@ class Player(Skeleton):
             else:
                 ground.move(WINW)
                 trees.move(WINW)
-                poops.move(WINW, colItems)
+                poops.move(WINW)
         # Backward
-        elif(key[K_a] and not self.collided('a', colItems, self.rect[0]) and not self.rect[0].x <= 0):
+        if(key[K_a] and not self.collided('a', colItems, self.rect[0]) and not self.rect[0].x <= 0):
             if not self.flipped:
                 self.img[0][0] = pygame.transform.flip(self.img[0][0], True, False)
+                self.flipped = True
+            super(Player, self).move('a')
 
         # JUMP Yo'
-        elif(key[K_w] and self.collided('s', colItems, self.rect[0]) and not self.collided('w', colItems, self.rect[0]) and not self.rect[0].y >= WINH):
+        if(key[K_SPACE] and self.collided('s', colItems, self.rect[0]) and not self.collided('w', colItems, self.rect[0]) and not self.rect[0].y >= WINH):
             self.velocity = -22
             super(Player, self).move('w')
+
         # Gravity
         if(not self.collided('s', colItems, self.rect[0]) or self.rect[0].y + self.rect[0].height >= WINH):
             super(Player, self).gravity()
@@ -103,11 +107,15 @@ class Poops(Skeleton):
     
     def __init__(self, image, x, y):
         Skeleton.__init__(self, image, x, y)
+        self.poopWait = 300
 
-    def move(self, WINH, colItems):
+    def move(self, WINH):
         super(Poops, self).move('a')
-        #if(not self.collided('s', colItems, self.rect[0]) or self.rect[0].y + self.rect[0].height >= WINH):
-        super(Poops, self).gravity()
+
+    def gravity2(self, colItems):
+        for poo in self.rect:
+            if(not self.collided('s', colItems, poo)):
+                super(Poops, self).gravity()
 
 #class hurtItems:
 
