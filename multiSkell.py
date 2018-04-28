@@ -75,13 +75,15 @@ class MultiSkeleton:
         if(self.velocity > 0):
             self.velocity = 0
         
-        for i in self.img:
-            i[2] += self.velocity
-            i[2] += self.gravity
-        for r in self.rect:
-            r[1] += self.velocity
-            r[1] += self.gravity
-        self.velocity += 2
+        for i in range(0, len(self.img)):
+            if(self.img[i][3] > 0):
+                self.img[i][3] = 0
+            self.img[i][1] += self.img[i][3]
+            self.img[i][2] += self.gravity
+            self.rect[i][0] += self.img[i][3]
+            self.rect[i][1] += self.gravity
+            if(self.img[i][3] != 0):
+                self.img[i][3] += 2
 
     def update(self, surf):
         for i in self.img:
