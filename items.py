@@ -11,8 +11,9 @@ class Player(Skeleton):
         Skeleton.__init__(self, image, x, y)
         self.flipped = False
         self.poopTimer = pygame.time.get_ticks()
+        self.hairBallTimer = pygame.time.get_ticks()
 
-    def move(self, key, WINW, colItems, WINH, ground, trees, poops):
+    def move(self, key, WINW, colItems, WINH, ground, trees, poops, hairballs):
         # Forward
         if(key[K_d] and not self.collided('d', colItems, self.rect[0]) and not self.rect[0].x + self.rect[0].width >= WINW):
             if self.flipped:
@@ -24,6 +25,7 @@ class Player(Skeleton):
                 ground.move(WINW)
                 trees.move(WINW)
                 poops.move(WINW)
+                hairballs.move(WINW)
         # Backward
         if(key[K_a] and not self.collided('a', colItems, self.rect[0]) and not self.rect[0].x <= 0):
             if not self.flipped:
@@ -33,7 +35,7 @@ class Player(Skeleton):
 
         # JUMP Yo'
         if(key[K_SPACE] and self.collided('s', colItems, self.rect[0]) and not self.collided('w', colItems, self.rect[0]) and not self.rect[0].y >= WINH):
-            self.velocity = -22
+            self.velocity = -20
             super(Player, self).move('w')
 
         # Gravity
@@ -100,22 +102,6 @@ class Clouds(Skeleton):
                 self.add(self.cloudLarge, self.x, self.y * heightOfCloud)
         super(Clouds, self).move('a')
 
-#####################
-#       POOPS       #
-#####################
-class Poops(Skeleton):
-    
-    def __init__(self, image, x, y):
-        Skeleton.__init__(self, image, x, y)
-        self.poopWait = 300
-
-    def move(self, WINH):
-        super(Poops, self).move('a')
-
-    def gravity2(self, colItems):
-        for poo in self.rect:
-            if(not self.collided('s', colItems, poo)):
-                super(Poops, self).gravity()
 
 #class hurtItems:
 
